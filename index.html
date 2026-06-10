@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FitZone Gym - Finance Tracker</title>
+    <!-- Google Fonts - Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- FontAwesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Main Style Sheet -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Sidebar / Header Section -->
+        <header class="main-header">
+            <div class="logo-area">
+                <div class="logo-icon"><i class="fa-solid fa-dumbbell"></i></div>
+                <div class="logo-text">
+                    <h1>FitZone Gym</h1>
+                    <span>Finance Dashboard</span>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button id="manage-categories-btn" class="btn btn-secondary">
+                    <i class="fa-solid fa-tags"></i> Categories
+                </button>
+                <div class="date-badge" id="current-date">
+                    <i class="fa-regular fa-calendar-days"></i> <span>June 10, 2026</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Main Dashboard Content -->
+        <main class="dashboard-main">
+            
+            <!-- Key Metrics Overview Row -->
+            <section class="metrics-grid">
+                <!-- Balance Card -->
+                <div class="metric-card balance">
+                    <div class="card-header">
+                        <span class="card-title">Current Balance</span>
+                        <div class="card-icon"><i class="fa-solid fa-wallet"></i></div>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="amount" id="total-balance">₹0.00</h2>
+                        <span class="trend neutral" id="balance-status">
+                            <i class="fa-solid fa-info-circle"></i> Net cash status
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Monthly Income Card -->
+                <div class="metric-card income">
+                    <div class="card-header">
+                        <span class="card-title">Total Income</span>
+                        <div class="card-icon"><i class="fa-solid fa-circle-arrow-down"></i></div>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="amount text-success" id="total-income">₹0.00</h2>
+                        <span class="trend positive" id="income-percentage">
+                            <i class="fa-solid fa-arrow-trend-up"></i> Active tracking
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Monthly Expense Card -->
+                <div class="metric-card expense">
+                    <div class="card-header">
+                        <span class="card-title">Total Expenses</span>
+                        <div class="card-icon"><i class="fa-solid fa-circle-arrow-up"></i></div>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="amount text-danger" id="total-expense">₹0.00</h2>
+                        <span class="trend negative" id="expense-percentage">
+                            <i class="fa-solid fa-arrow-trend-down"></i> Outgoing cash
+                        </span>
+                    </div>
+                </div>
+
+                <!-- Savings Rate / Savings Card -->
+                <div class="metric-card net-profit">
+                    <div class="card-header">
+                        <span class="card-title">Net Margin</span>
+                        <div class="card-icon"><i class="fa-solid fa-chart-pie"></i></div>
+                    </div>
+                    <div class="card-body">
+                        <h2 class="amount" id="net-margin-value">0%</h2>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" id="net-margin-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Quick Action Bar -->
+            <section class="quick-actions">
+                <div class="action-title">
+                    <h3>Quick Entry</h3>
+                </div>
+                <div class="action-buttons">
+                    <button class="btn btn-success" id="add-income-btn">
+                        <i class="fa-solid fa-plus"></i> Add Income
+                    </button>
+                    <button class="btn btn-danger" id="add-expense-btn">
+                        <i class="fa-solid fa-minus"></i> Add Expense
+                    </button>
+                </div>
+            </section>
+
+            <!-- Dashboard Split Layout -->
+            <div class="dashboard-split">
+                <!-- Left Sidebar: Filters & Summary Charts -->
+                <aside class="dashboard-sidebar">
+                    <!-- Date Filters Card -->
+                    <div class="content-card filters-card">
+                        <div class="card-heading">
+                            <h3><i class="fa-solid fa-sliders"></i> Filter Transactions</h3>
+                            <button id="clear-filters-btn" class="text-btn text-primary">Reset</button>
+                        </div>
+                        
+                        <!-- Quick Select Date Filters -->
+                        <div class="quick-date-filters">
+                            <button class="filter-chip active" data-filter="all">All Time</button>
+                            <button class="filter-chip" data-filter="month">This Month</button>
+                            <button class="filter-chip" data-filter="week">This Week</button>
+                            <button class="filter-chip" data-filter="custom">Custom Date</button>
+                        </div>
+
+                        <!-- Custom Date Inputs (Hidden by default or toggled) -->
+                        <div class="custom-date-inputs" id="custom-date-container">
+                            <div class="form-group">
+                                <label for="filter-start-date">Start Date</label>
+                                <input type="date" id="filter-start-date">
+                            </div>
+                            <div class="form-group">
+                                <label for="filter-end-date">End Date</label>
+                                <input type="date" id="filter-end-date">
+                            </div>
+                        </div>
+
+                        <div class="separator"></div>
+
+                        <!-- Type & Payment Method Filters -->
+                        <div class="form-group">
+                            <label for="filter-category">Filter by Category</label>
+                            <select id="filter-category">
+                                <option value="all">All Categories</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="filter-payment-method">Payment Method</label>
+                            <select id="filter-payment-method">
+                                <option value="all">All Methods</option>
+                                <option value="Cash">Cash</option>
+                                <option value="Card">Card</option>
+                                <option value="UPI">UPI</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Monthly Summary Card -->
+                    <div class="content-card summary-card">
+                        <div class="card-heading">
+                            <h3><i class="fa-solid fa-chart-simple"></i> Monthly Breakdown</h3>
+                        </div>
+                        <div class="summary-months-selector">
+                            <select id="summary-month-select">
+                                <!-- Populated dynamically based on stored data -->
+                            </select>
+                        </div>
+                        <div class="monthly-breakdown-details">
+                            <div class="breakdown-chart" id="category-chart-container">
+                                <!-- Dynamically loaded bars of category distributions -->
+                                <div class="empty-state-small">
+                                    <i class="fa-solid fa-chart-line"></i>
+                                    <p>No transactions this month</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
+
+                <!-- Right Side: Transactions History List -->
+                <section class="dashboard-content">
+                    <div class="content-card history-card">
+                        <div class="card-heading history-heading">
+                            <div class="title-with-count">
+                                <h3><i class="fa-solid fa-history"></i> Transaction History</h3>
+                                <span class="badge" id="transaction-count">0</span>
+                            </div>
+                            <div class="search-box">
+                                <i class="fa-solid fa-magnifying-glass"></i>
+                                <input type="text" id="search-transactions" placeholder="Search by title/description...">
+                            </div>
+                        </div>
+
+                        <!-- Table / Card List wrapper for responsiveness -->
+                        <div class="table-responsive">
+                            <table class="transaction-table" id="transaction-table">
+                                <thead>
+                                    <tr>
+                                        <th class="col-date">Date</th>
+                                        <th class="col-desc">Description</th>
+                                        <th class="col-cat">Category</th>
+                                        <th class="col-method">Method</th>
+                                        <th class="col-amount text-right">Amount</th>
+                                        <th class="col-action"></th>
+                                    </tr>
+                                </thead>
+                                <tbody id="transaction-rows">
+                                    <!-- Populated dynamically -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Empty State -->
+                        <div class="empty-state-large" id="empty-state">
+                            <div class="empty-icon"><i class="fa-solid fa-receipt"></i></div>
+                            <h3>No transactions found</h3>
+                            <p>It looks like you haven't recorded any income or expenses yet. Click "Add Income" or "Add Expense" to get started.</p>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="main-footer">
+            <p>&copy; 2026 FitZone Gym Finance Tracker. Powered by Local Storage.</p>
+        </footer>
+    </div>
+
+    <!-- ADD/EDIT TRANSACTION MODAL -->
+    <div class="modal-backdrop" id="transaction-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modal-title"><i class="fa-solid fa-plus-circle"></i> Add Transaction</h3>
+                <button class="close-btn" id="close-transaction-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="transaction-form" autocomplete="off">
+                <input type="hidden" id="transaction-id">
+                <input type="hidden" id="transaction-flow-type"> <!-- 'income' or 'expense' -->
+                
+                <div class="modal-body">
+                    <!-- Amount field (Highlighted) -->
+                    <div class="form-group amount-group">
+                        <label for="trans-amount">Amount (₹)</label>
+                        <div class="amount-input-wrapper">
+                            <span class="currency-symbol">₹</span>
+                            <input type="number" id="trans-amount" step="0.01" min="0.01" placeholder="0.00" required>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <!-- Date -->
+                        <div class="form-group">
+                            <label for="trans-date">Date</label>
+                            <input type="date" id="trans-date" required>
+                        </div>
+                        <!-- Transaction Type / Payment Method -->
+                        <div class="form-group">
+                            <label for="trans-method">Payment Method</label>
+                            <select id="trans-method" required>
+                                <option value="Cash">Cash</option>
+                                <option value="Card">Card</option>
+                                <option value="UPI" selected>UPI</option>
+                                <option value="Bank Transfer">Bank Transfer</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Category -->
+                    <div class="form-group">
+                        <label for="trans-category">Category</label>
+                        <select id="trans-category" required>
+                            <!-- Populated dynamically based on Income/Expense choice -->
+                        </select>
+                    </div>
+
+                    <!-- Title / Description -->
+                    <div class="form-group">
+                        <label for="trans-title">Description</label>
+                        <input type="text" id="trans-title" placeholder="e.g. Monthly membership renewal" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" id="cancel-transaction-modal">Cancel</button>
+                    <button type="submit" class="btn" id="save-transaction-btn">Save Entry</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MANAGE CATEGORIES MODAL -->
+    <div class="modal-backdrop" id="categories-modal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3><i class="fa-solid fa-tags"></i> Manage Categories</h3>
+                <button class="close-btn" id="close-categories-modal"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="modal-body">
+                <!-- Tabs for Income vs Expense categories -->
+                <div class="category-tabs">
+                    <button class="tab-btn active" id="tab-income-categories" onclick="switchCategoryTab('income')">Income</button>
+                    <button class="tab-btn" id="tab-expense-categories" onclick="switchCategoryTab('expense')">Expenses</button>
+                </div>
+
+                <!-- Add Category Sub-form -->
+                <form id="add-category-form" class="inline-add-form">
+                    <input type="text" id="new-category-name" placeholder="New category name..." required>
+                    <button type="submit" class="btn btn-primary"><i class="fa-solid fa-plus"></i> Add</button>
+                </form>
+
+                <div class="separator"></div>
+
+                <!-- Category List -->
+                <div class="categories-list-container">
+                    <ul class="categories-list" id="categories-list-ul">
+                        <!-- Populated dynamically -->
+                    </ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" id="close-categories-modal-btn">Done</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Alert Toast notifications -->
+    <div class="toast-container" id="toast-container"></div>
+
+    <!-- Main JavaScript Logic -->
+    <script src="app.js"></script>
+</body>
+</html>
